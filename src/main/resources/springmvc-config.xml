@@ -4,11 +4,17 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+<!--
+   context:component-scan 标签的作用
+   在Spring IOC 初始化过程中,自动创建并管理 org.example.controller 及子包中拥有以下注解的对象
+   @Repository @Service @Controller @Component
+   -->
 
     <context:component-scan base-package="org.example.controller"/>
     <!--将图片/js/css等静态资源排除在外，可提高执行效率-->
     <mvc:default-servlet-handler/>
-    <!--让MVC的注解生效-->
+    <!--启用 SpringMVC的注解开发模式-->
+    <!--解决字符集中文乱码问题-->
     <mvc:annotation-driven>
     <mvc:message-converters>
         <bean class="org.springframework.http.converter.StringHttpMessageConverter">
@@ -22,22 +28,24 @@
         </bean>
     </mvc:message-converters>
 </mvc:annotation-driven>
-    <!--配置自定义类型转换器-->
-    <!--<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
-    <!--    <property name="converters">-->
-    <!--        <set>-->
-    <!--            <bean class="org.example.convert.DateConverter" />-->
-    <!--        </set>-->
-    <!--    </property>-->
-    <!--</bean>-->
 
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <property name="formatters">
+    <mvc:annotation-driven conversion-service="conversionService"/>
+<!--    配置自定义类型转换器-->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
             <set>
-                <bean class="org.example.convert.DateFormatter" />
+                <bean class="org.example.convert.DateConverter" />
             </set>
         </property>
     </bean>
+
+<!--    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">-->
+<!--        <property name="formatters">-->
+<!--            <set>-->
+<!--                <bean class="org.example.convert.DateFormatter" />-->
+<!--            </set>-->
+<!--        </property>-->
+<!--    </bean>-->
 
     <!--定义视图解析器-->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">

@@ -22,7 +22,22 @@
         </bean>
     </mvc:message-converters>
 </mvc:annotation-driven>
+    <!--配置自定义类型转换器-->
+    <!--<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
+    <!--    <property name="converters">-->
+    <!--        <set>-->
+    <!--            <bean class="org.example.convert.DateConverter" />-->
+    <!--        </set>-->
+    <!--    </property>-->
+    <!--</bean>-->
 
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatters">
+            <set>
+                <bean class="org.example.convert.DateFormatter" />
+            </set>
+        </property>
+    </bean>
 
     <!--定义视图解析器-->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
